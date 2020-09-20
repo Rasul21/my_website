@@ -1,5 +1,5 @@
 # Site settings
-baseURL = "http://example.org/"
+baseURL = "http://rasulrasulov.netlify.app/"
 languageCode = "en-us"
 title = "Portfolio Website for Rasul Rasulov"
 theme = "forty"
@@ -19,8 +19,8 @@ disqusShortname = ""
   # CSS class.
 
   # Provide your metadata here.
-  name = "Your name"
-  description = "Your description"
+  name = "Rasul Rasulov"
+  description = "LBS Student"
 
   # Link custom assets relative to /static
   custom_css = []
@@ -37,9 +37,9 @@ disqusShortname = ""
 
   # Navigation Section
   [params.navigation]
-    title = "Forty"
-    subtitle = "By HTML5 Up"
-    menu = "Menu"
+    title = "Rasul's"
+    subtitle = "Portfolio Website"
+    #menu = "Menu"
     # Optional logo as brand stored in img/
     # logo = "logo.png"
 
@@ -48,16 +48,16 @@ disqusShortname = ""
       url = "#"
 
     [[params.navigation.links]]
-      name = "Blogs"
-      url = "blogs"
+      #name = "Projects"
+      #url = "blogs"
 
-    [[params.navigation.links]]
-      name = "Generic Blog"
-      url = "blogs/ipsum"
+    #[[params.navigation.links]]
+      #name = "Generic Blog"
+      #url = "blogs/ipsum"
 
-    [[params.navigation.links]]
-      name = "Elements"
-      url = "elements.html"
+    #[[params.navigation.links]]
+      #name = "Elements"
+      #url = "elements.html"
 
     # Add custom links here by uncommenting code below. To remove links just delete
     # the [[params.navigation.links]] map associated with that link. Copy and paste
@@ -138,14 +138,10 @@ disqusShortname = ""
   # Section Type Two
   [params.two]
     enable = true
-    title = "Massa libero"
-    subtitle = """Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. 
-    Mauris aliquet magna magna sed nunc rhoncus pharetra. 
-    Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. 
-    Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero.
-    Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus."""
-    buttonText = "Get Started"
-    url = "blogs"
+    title = "About Myself"
+    subtitle = "I am currently studying at London Business School Masters in Analytics and Management. Prior to joining LBS I had my undergraduate degree in Economics and Finance. During intense academic and work experiences I realsized that I am looking forward for the role of product management. I started in a startup aimed at increasing financial literacy levels in Russia among youngsters. This was an amazing experience contributing to a really important aspect of modern society. I also gained experience at EY Business Valuation department where I realized that I want to make change to the world through business solutions."
+    #buttonText = "Get Started"
+    #url = "blogs"
 
 
   # Contact section
