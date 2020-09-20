@@ -98,34 +98,34 @@ disqusShortname = ""
       url = "blogs/Project1"
 
     [[params.tiles.showcase]]
-      title = "Tempus"
-      subtitle = "Feugiat Amet Tempus"
-      image = "pic02.jpg"
-      url = "blogs/blog2"
+      title = "Comparing Hollywood Directors: Steven Spielberg and Tim Burton"
+      #subtitle = "Feugiat Amet Tempus"
+      image = "hollywood.jpg"
+      url = "blogs/Project2"
+
+    #[[params.tiles.showcase]]
+      #title = "Gender Inequality"
+      #subtitle = "Analysis of difference in pay for men and women "
+      #image = "gender.png"
+      #url = "blogs/project4"
 
     [[params.tiles.showcase]]
-      title = "Magna"
-      subtitle = "Lorem Etiam Nullam"
-      image = "pic03.jpg"
-      url = "blogs/blog3"
+      title = "Climate Change and Temperature Anomalies"
+      subtitle = "Earth is Heating"
+      image = "warming.jpg"
+      url = "blogs/project5"
 
     [[params.tiles.showcase]]
-      title = "Ipsum"
-      subtitle = "Nisl Sed Aliquam"
-      image = "pic04.jpg"
-      url = "blogs/blog4"
+      title = "Analysis of Social Networks Use Among Adults in The US"
+      #subtitle = ""
+      image = "social.jpg"
+      url = "blogs/project6"
 
     [[params.tiles.showcase]]
-      title = "Consequat"
-      subtitle = "Ipsum Dolor Sit Amet"
-      image = "pic05.jpg"
-      url = "blogs/blog5"
-
-    [[params.tiles.showcase]]
-      title = "Etiam"
-      subtitle = "Feugiat Amet Tempus"
-      image = "pic06.jpg"
-      url = "blogs/blog6"
+      title = "Analysis of AirBnB property prices in Munich"
+      #subtitle = "Feugiat Amet Tempus"
+      image = "airbnb.jpg"
+      url = "blogs/project7"
     # You can make more showcases by copy and pasting the code above
 
   [params.blog]
