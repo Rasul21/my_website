@@ -13,6 +13,7 @@ title: "Suicide and Homicide Rates Among White Males in The US"
 
 
 ```{r, setup}
+
 knitr::opts_chunk$set(
   message = FALSE, 
   warning = FALSE, 
