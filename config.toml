@@ -177,7 +177,7 @@ disqusShortname = ""
     [[params.contact.address]]
     title = "Address"
     street = "Baker Street"
-    city = "Londin"
+    city = "London"
     country = "Great Britain"
 
   # Footer section
