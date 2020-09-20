@@ -8,6 +8,16 @@
     <language>en-us</language>
     <lastBuildDate>Tue, 31 Oct 2017 22:27:21 -0500</lastBuildDate><atom:link href="/blogs/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Suicide and Homicide Rates Among White Males in The US</title>
+      <link>/blogs/project1/</link>
+      <pubDate>Mon, 07 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blogs/project1/</guid>
+      <description>knitr::opts_chunk$set( message = FALSE, warning = FALSE, tidy=FALSE, # display code as typed size=&amp;quot;small&amp;quot;) # slightly smaller font for code options(digits = 3) # default figure size knitr::opts_chunk$set( fig.width=6.75, fig.height=6.75, fig.align = &amp;quot;center&amp;quot; ) Challenge 1: Replicating a chart I have created a publication-ready plot using our dplyr and ggplot2 skills.
+The bubble chart that we replicated shows the position of the states in terms of the firearms related cases of homicide and suicide across white males.</description>
+    </item>
+    
+    <item>
       <title>Aliquam</title>
       <link>/blogs/aliquam/</link>
       <pubDate>Tue, 31 Oct 2017 22:42:51 -0500</pubDate>

@@ -1,0 +1,185 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name="description" content="LBS Student">
+	<meta name="author" content="Rasul Rasulov">
+	<meta name="generator" content="Hugo 0.75.1" />
+	<title>Suicide and Homicide Rates Among White Males in The US &middot; Portfolio Website for Rasul Rasulov</title>
+	<!-- Stylesheets -->
+	
+	<link rel="stylesheet" href="/css/main.css"/>
+	
+	
+
+	
+
+	<!-- Custom Fonts -->
+	<link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<link rel="icon" type="image/x-icon" href="/favicon.ico">
+	
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="js/ie/html5shiv.js"></script>
+	<script src="js/ie/html5shiv.jsrespond.min.js"></script>
+	<![endif]-->
+</head>
+
+    <body>
+
+    <!-- Wrapper -->
+        <div id="wrapper">
+
+            <!-- Header -->
+    <header id="header" class="alt">
+        <a href="/" class="logo"><strong>Rasul&#39;s</strong> <span>Portfolio Website</span></a>
+        <nav>
+            <a href="#menu"></a>
+        </nav>
+    </header>
+
+<!-- Menu -->
+    <nav id="menu">
+        <ul class="links">
+            
+                <li><a href="/">My Portfolio</a></li>
+            
+                <li><a href="/"></a></li>
+            
+
+        </ul>
+        <ul class="actions vertical">
+            
+            
+        </ul>
+    </nav>
+
+        <!-- Main -->
+            <div id="main" class="alt">
+
+                
+                    <section id="one">
+                        <div class="inner">
+                            <header class="major">
+                                <h1>Suicide and Homicide Rates Among White Males in The US</h1>
+                            </header>
+                            
+                                <span class="image main"><img src="/img/blogs/cowbot_bebop.jpg" alt="" /></span>
+                            
+                            
+
+
+<pre class="r"><code>knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size=&quot;small&quot;)   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = &quot;center&quot;
+)</code></pre>
+<div id="challenge-1-replicating-a-chart" class="section level1">
+<h1>Challenge 1: Replicating a chart</h1>
+<p>I have created a publication-ready plot using our <code>dplyr</code> and <code>ggplot2</code> skills.</p>
+<p>The bubble chart that we replicated shows the position of the states in terms of the firearms related cases of homicide and suicide across white males. The bubble size is determined by a white population of the state and the color of the dot is responsible for the gun ownership category. The states with high gun ownership rates are the ones with highest suicide and homicide rates. What can also be inferred from the graph is that the states with highest suicide rates and gun ownership are those with low white population figures. Hence, on average, white male has a lower chance to be involved in homicide or a suicide if he lives in a state with large white population figures.
+As to the replication of this graph, it first required some work over the dataset, as only firearms related cases should be depicted and there were some NA’s all over the dataset. Correct labeling of the bubbles in the chart, painting them in accordance with Gun ownership category, and setting the size proportional to white population was followed by scaling the bubble size and correctly representing the legend. Two libraries were activated to avoid text overlapping and to set matching color scheme. Custom theme allows to control for font size, grid lines and other. Figure size was controlled for and the graph was set to be square to match the original version.
+Below you can see our version of the article plot:</p>
+<pre class="r"><code># Replicate Figure 3
+CDC &lt;- read_csv(here::here(&quot;data&quot;, &quot;CDC_Males.csv&quot;))
+CDC %&gt;%
+  filter(type==&quot;Firearm&quot;) %&gt;% #use this function to select only firearms cases
+  drop_na(&quot;gun.house.prev.category&quot;) %&gt;% #omitting missing values
+  ggplot(mapping=aes(x=adjusted.suicide.White, #using ggplot to build a bubble plot
+                     y=adjusted.homicide.White, #setting x and y
+                     size=average.pop.white, #setting bubble size proportional to white population                                    
+  fill=gun.house.prev.category, label=ST))+ #labeling bubbles by the states&#39; names and painting them according to gun ownership category
+  geom_point(shape=21, color=&quot;black&quot;, stroke=0.5)+ #choosing dotplot, controlling the shape by &quot;shape&quot; and color using &quot;color&quot; and outline width using &quot;stroke&quot; set to 0.5
+  scale_size(range = c(1, 15), name = &quot;White Population&quot;, breaks=c(500000,1500000,3000000,7000000), #range&quot; allows to control the bubble size, &quot;name&quot; makes it possible to name the circle size legend and &quot;breaks&quot;   allow to choose the number of circles in the legend and control their size
+  label=c(&quot;500k&quot;,&quot;1.5m&quot;,&quot;3m&quot;,&quot;7m&quot;))+ #labels allow to replicate the legend values
+  geom_text_repel(size=4)+ #making size of the states names similar to the ones in the article plot
+  labs(fill=&quot;Gun ownership&quot;)+ #naming the legend
+  ylab(&quot;White Homicide Rate (per 100 000 per Year)&quot;)+ #naming y axis
+  xlab(&quot;White Suicide Rate (per 100 000 per Year)&quot;)+ #naming x axis
+  scale_fill_brewer(palette = &quot;OrRd&quot;)+ #setting color scheme as in the original version
+  theme(axis.title = element_text(size=10), #axis titles edited
+        axis.text = element_text(size=8, color=&quot;black&quot;), #axis text edited
+        panel.grid.major=element_line(color = &quot;gray90&quot;, size = 0.5), #adding major grid  lines
+        panel.grid.minor = element_line(color = &quot;gray97&quot;, size=0.5), #adding minor grid lines
+        legend.title=element_text(size=10), #legend title edited
+        legend.text = element_text(size=9), #legend text edited
+        legend.key = element_blank(), #removing legend key background
+        panel.background = element_rect(color=&quot;black&quot;, fill=&quot;white&quot;))+ #graph background set to white and contour set to black
+  guides(fill = guide_legend(override.aes = list(size=5), order = 1))+  #changing size of legend circles of &quot;Gun ownership&quot; and placing &quot;Gun ownership&quot; legend above &quot;White population&quot;
+  coord_fixed(ratio = 5) + #making the plot symmetric (square)
+  annotate(geom=&quot;text&quot;, x=25, y=0.75, label=&quot;Spearman&#39;s rho: 0.74&quot;) #adding Spearman&#39;s rho correlation as in article graph</code></pre>
+<p><img src="/blogs/Project1_files/figure-html/challenge1_group9-1.png" width="720" style="display: block; margin: auto;" /></p>
+</div>
+
+                        </div>
+                    </section>
+            <!-- Disqus Inject -->
+                
+            </div>
+            
+        <!-- Footer -->
+            
+                <!-- Footer -->
+    <footer id="footer">
+        <div class="inner">
+            <ul class="icons">
+                
+                    <li><a href="https://www.twitter.com" class="icon alt fa-twitter" target="_blank"><span class="label">Twitter</span></a></li>
+                
+                    <li><a href="https://www.facebook.com" class="icon alt fa-facebook" target="_blank"><span class="label">Facebook</span></a></li>
+                
+                    <li><a href="https://www.instagram.com" class="icon alt fa-instagram" target="_blank"><span class="label">Instagram</span></a></li>
+                
+                    <li><a href="https://www.github.com" class="icon alt fa-github" target="_blank"><span class="label">GitHub</span></a></li>
+                
+                    <li><a href="https://www.linkedin.com" class="icon alt fa-linkedin" target="_blank"><span class="label">LinkedIn</span></a></li>
+                
+            </ul>
+            <ul class="copyright">
+                <li>&copy; Rasul Rasulov</li>
+                
+                <li>Design:  <a href="https://www.html5up.net">HTML5 UP</a></li>
+                
+            </ul>
+        </div>
+    </footer>
+
+            
+        </div>
+
+    <!-- Scripts -->
+        <!-- Scripts -->
+    <!-- jQuery -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+
+    
+
+    <!-- Main JS -->
+    <script src="/js/main.js"></script>
+
+    
+
+    
+
+    </body>
+</html>
