@@ -1,0 +1,88 @@
+---
+title: "Suicide and Homicide Rates Among White Males in The US"
+author: "Rasul Rasulov"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+    code_folding: show
+---
+
+
+```{r, setup}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = "center"
+)
+```
+
+
+```{r load-libraries, warning=FALSE, message=FALSE, echo=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(lubridate)
+library(fivethirtyeight)
+library(here)
+library(skimr)
+library(janitor)
+library(tidyquant)
+library(vroom)
+library(kableExtra)
+library(tidytext)
+library(knitr)
+library(ggrepel)
+library(RColorBrewer)
+```
+
+# Challenge 1: Replicating a chart
+
+I have created a publication-ready plot using our `dplyr` and `ggplot2` skills.
+
+The bubble chart that we replicated shows the position of the states in terms of the firearms related cases of homicide and suicide across white males. The bubble size is determined by a white population of the state and the color of the dot is responsible for the gun ownership category. The states with high gun ownership rates are the ones with highest suicide and homicide rates. What can also be inferred from the graph is that the states with highest suicide rates and gun ownership are those with low white population figures. Hence, on average, white male has a lower chance to be involved in homicide or a suicide if he lives in a state with large white population figures.
+As to the replication of this graph, it first required some work over the dataset, as only firearms related cases should be depicted and there were some NA's all over the dataset. Correct labeling of the bubbles in the chart, painting them in accordance with Gun ownership category, and setting the size proportional to white population was followed by scaling the bubble size and correctly representing the legend. Two libraries were activated to avoid text overlapping and to set matching color scheme. Custom theme allows to control for font size, grid lines and other. Figure size was controlled for and the graph was set to be square to match the original version. 
+Below you can see our version of the article plot:
+
+```{r, challenge1_group9, fig.width=7.5, fig.height=7.5}
+# Replicate Figure 3
+CDC <- read_csv(here::here("data", "CDC_Males.csv"))
+CDC %>%
+  filter(type=="Firearm") %>% #use this function to select only firearms cases
+  drop_na("gun.house.prev.category") %>% #omitting missing values
+  ggplot(mapping=aes(x=adjusted.suicide.White, #using ggplot to build a bubble plot
+                     y=adjusted.homicide.White, #setting x and y
+                     size=average.pop.white, #setting bubble size proportional to white population                                    
+  fill=gun.house.prev.category, label=ST))+ #labeling bubbles by the states' names and painting them according to gun ownership category
+  geom_point(shape=21, color="black", stroke=0.5)+ #choosing dotplot, controlling the shape by "shape" and color using "color" and outline width using "stroke" set to 0.5
+  scale_size(range = c(1, 15), name = "White Population", breaks=c(500000,1500000,3000000,7000000), #range" allows to control the bubble size, "name" makes it possible to name the circle size legend and "breaks"   allow to choose the number of circles in the legend and control their size
+  label=c("500k","1.5m","3m","7m"))+ #labels allow to replicate the legend values
+  geom_text_repel(size=4)+ #making size of the states names similar to the ones in the article plot
+  labs(fill="Gun ownership")+ #naming the legend
+  ylab("White Homicide Rate (per 100 000 per Year)")+ #naming y axis
+  xlab("White Suicide Rate (per 100 000 per Year)")+ #naming x axis
+  scale_fill_brewer(palette = "OrRd")+ #setting color scheme as in the original version
+  theme(axis.title = element_text(size=10), #axis titles edited
+        axis.text = element_text(size=8, color="black"), #axis text edited
+        panel.grid.major=element_line(color = "gray90", size = 0.5), #adding major grid  lines
+        panel.grid.minor = element_line(color = "gray97", size=0.5), #adding minor grid lines
+        legend.title=element_text(size=10), #legend title edited
+        legend.text = element_text(size=9), #legend text edited
+        legend.key = element_blank(), #removing legend key background
+        panel.background = element_rect(color="black", fill="white"))+ #graph background set to white and contour set to black
+  guides(fill = guide_legend(override.aes = list(size=5), order = 1))+  #changing size of legend circles of "Gun ownership" and placing "Gun ownership" legend above "White population"
+  coord_fixed(ratio = 5) + #making the plot symmetric (square)
+  annotate(geom="text", x=25, y=0.75, label="Spearman's rho: 0.74") #adding Spearman's rho correlation as in article graph
+```

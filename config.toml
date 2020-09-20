@@ -83,7 +83,7 @@ disqusShortname = ""
     # the 'static/img' folder.
     title = "Hi, my name is Rasul"
     subtitle = "Ambitious LBS student that is passionate to bring innovation to the world"
-    buttonText = "Get To know me better"
+    buttonText = "View my projects"
 
 
   # Tiles Section
@@ -95,37 +95,37 @@ disqusShortname = ""
       title = "Analysis of suicide and homicide rates among white males in the US"
       subtitle = "Illustration"
       image = "projects/cowboy_bebop.jpg"
-      url = "blogs/aliquam"
+      url = "projects/PROJECT1"
 
     [[params.tiles.showcase]]
       title = "Tempus"
       subtitle = "Feugiat Amet Tempus"
       image = "pic02.jpg"
-      url = "blogs/tempus"
+      url = "projects/Project2"
 
     [[params.tiles.showcase]]
       title = "Magna"
       subtitle = "Lorem Etiam Nullam"
       image = "pic03.jpg"
-      url = "blogs/magna"
+      url = "projects/Project3"
 
     [[params.tiles.showcase]]
       title = "Ipsum"
       subtitle = "Nisl Sed Aliquam"
       image = "pic04.jpg"
-      url = "blogs/ipsum"
+      url = "projects/Project4"
 
     [[params.tiles.showcase]]
       title = "Consequat"
       subtitle = "Ipsum Dolor Sit Amet"
       image = "pic05.jpg"
-      url = "blogs/ipsum"
+      url = "projects/Project5"
 
     [[params.tiles.showcase]]
       title = "Etiam"
       subtitle = "Feugiat Amet Tempus"
       image = "pic06.jpg"
-      url = "blogs/ipsum"
+      url = "projects/Project6"
     # You can make more showcases by copy and pasting the code above
 
   [params.blog]
@@ -139,7 +139,7 @@ disqusShortname = ""
   [params.two]
     enable = true
     title = "About Myself"
-    subtitle = "I am currently studying at London Business School Masters in Analytics and Management. Prior to joining LBS I had my undergraduate degree in Economics and Finance. During intense academic and work experiences I realsized that I am looking forward for the role of product management. I started in a startup aimed at increasing financial literacy levels in Russia among youngsters. This was an amazing experience contributing to a really important aspect of modern society. I also gained experience at EY Business Valuation department where I realized that I want to make change to the world through business solutions."
+    subtitle = "I am currently studying at London Business School Masters in Analytics and Management. Prior to joining LBS I had my undergraduate degree in Economics and Finance. During intense academic and work experiences I realsized that I am looking forward for the role in product management. I started in a startup aimed at increasing financial literacy levels in Russia among youngsters. This was an amazing experience contributing to a really important aspect of modern society. I also gained experience at EY Business Valuation department where I realized that I want to make change to the world through business solutions."
     #buttonText = "Get Started"
     #url = "blogs"
 
