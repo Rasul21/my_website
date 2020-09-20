@@ -1,0 +1,301 @@
+---
+categories:
+- ""
+- ""
+date: 2020-09-07
+description: Estimating population proportion of Snapchat, Instagram, and Twitter Users
+draft: false
+image: social.jpg
+keywords: ""
+slug: Project6
+title: "Analysis of Social Networks Use Among Adults in The US"
+---
+
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = "center"
+)
+```
+
+
+```{r load-libraries, include=FALSE, echo=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(lubridate)
+library(here)
+library(skimr)
+library(janitor)
+library(httr)
+library(readxl)
+library(vroom)
+library(infer)
+library(scales)
+library(kableExtra)
+```
+
+# General Social Survey (GSS)
+
+The [General Social Survey (GSS)](http://www.gss.norc.org/) gathers data on American society in order to monitor and explain trends in attitudes, behaviours, and attributes. Many trends have been tracked for decades, so one can see the evolution of attitudes, etc in American Society.
+
+
+Using data from the **2016 GSS sample data** we are attempting to estimate the values of *population parameters* of interest about US adults. The GSS sample data file has 2867 observations of 935 variables, but we are only interested in very few of these variables hence a smaller file is chosen.
+
+Using vroom function we are able to read the csv file with necessary data in a relatively quick way
+
+```{r, read_gss_data, cache=TRUE}
+gss <- vroom::vroom(here::here("data", "smallgss2016.csv"), 
+                    #choosing the file and reading it
+                na = c("", "Don't know",
+                       "No answer", "Not applicable")) 
+#setting the answers which will further be considered as NA
+```
+
+We exclude some answers such as "Don't know", "No answer", "Not applicable" and treat them as missing data
+
+The goal is to create 95% confidence intervals for population parameters. Let's quickly describe the variables that the dataset provides:
+
+- hours and minutes spent on email weekly. The responses to these questions are recorded in the `emailhr` and `emailmin` variables. For example, if the response is 2.50 hours, this would be recorded as emailhr = 2 and emailmin = 30.
+- `snapchat`, `instagrm`, `twitter`: whether respondents used these social media in 2016
+- `sex`: Female - Male
+- `degree`: highest education level attained
+
+## Instagram and Snapchat, by sex
+
+The ultimate goal here is to try and estimate the *population* proportion of Snapchat or Instagram users in 2016
+
+First step is creating a  new variable, `snap_insta` that is *Yes* if the respondent reported using any of Snapchat (`snapchat`) or Instagram (`instagrm`), and *No* if not. It takes value *NA* If the recorded value was *NA* for both of these questions
+
+```{r, snap_insta, cache=TRUE}
+gss_new<-gss %>% 
+  na_if("NA") %>% #this allows R to treat cells with "NA" as missing data
+  mutate(
+    snap_insta=ifelse(snapchat=="NA"&instagrm=="NA", #creating new variable
+                      "NA", 
+          #if both snapchat and instagram take value "NA", then snap_insta also takes value "NA"
+                      ifelse(snapchat=="Yes"|instagrm=="Yes", 
+                             "Yes", 
+                             "No")))
+#otherwise it takes value Yes (if either snapchat or instagram is used) or No 
+#if the latter is not the case
+```
+
+Next step is to calculate the proportion of Yes’s for `snap_insta` among those who answered the question. We have provided calculation either way:
+-separately for men and women
+-combined for men and women 
+
+```{r, snap_insta_proportion, cache=TRUE}
+gss_newer_sep<-gss_new%>%
+  filter(!is.na(snap_insta)) %>% #excluding missing data
+  group_by(sex) %>% #grouping by sex to attain separate proportions for men and women
+  mutate(user=ifelse(snap_insta=="Yes", 1, 0)) %>% #creating dummy variable which takes value 1 if snap_insta variable   is equal to "Yes" and 0 otherwise for men and women separately
+  summarise(total=length(user), answer_yes=sum(user)) %>% #counting how many responded in total and how many responded   "Yes" among men and women
+  mutate(prop=answer_yes/total) #counting the proportion of "Yes's" for snap_insta among those who answered separ
+
+gss_newer_sep
+
+gss_newer<-gss_new%>%
+  filter(!is.na(snap_insta)) %>% #excluding missing data
+  mutate(user=ifelse(snap_insta=="Yes", 1, 0)) %>% 
+  #creating dummy variable which takes value 1 if snap_insta variable is equal to "Yes"
+  #and 0 otherwise
+  summarise(total=length(user), answer_yes=sum(user)) %>% #counting how many responded 
+  #in total and how many responded "Yes" by counting the sum of 1's in the dummy created earlier
+  mutate(prop=answer_yes/total) #counting the proportion of "Yes's" for snap_insta
+  #among those who answered
+
+gss_newer
+```
+
+1. Now we construct 95% CIs for men and women who used either Snapchat or Instagram and repeat this for combined sample (both men and women)
+
+```{r, snap_insta_CI, cache=TRUE}
+gss_newer_sep %>%
+  group_by(sex) %>% #grouping by sex to see for who the interval is calculated for
+  summarise(lower_95=prop-qt(0.975, total-1)*sqrt((prop*(1-prop))/total), 
+            upper_95=prop+qt(0.975, total-1)*sqrt((prop*(1-prop))/total))
+#using CI formula for proportion
+
+gss_newer %>% 
+  summarise(lower_95=prop-qt(0.975, total-1)*sqrt((prop*(1-prop))/total), 
+            upper_95=prop+qt(0.975, total-1)*sqrt((prop*(1-prop))/total))
+#using CI formula for proportion
+
+```
+
+Some interpretation is also required. For the separate intervals we have it as follows:
+We are 95% confident that *population proportion* of females that used instagram or snapchat is in the interval between 0.384 and 0.454. 
+We are 95% confident that *population proportion* of males that used instagram or snapchat is in the interval between 0.281 and 0.356.
+
+So, there is certain tendency that lower proportion of males tend to use social networks. 
+
+As to combined data:
+We are 95% confident that *population proportion* of males that used instagram or snapchat is in the interval between 0.349 and 0.4.
+
+## Twitter, by education level
+
+Now we move on to estimation of the *population* proportion of Twitter users by education level in 2016 
+
+First of all, we turn `degree` variable from a character variable into a factor variable. We ensure that the order is the correct one by setting levels as R sorts alphabetically by default. The order that we used is ascending order of years of education, are Lt high school, High School, Junior college, Bachelor, Graduate. 
+
+```{r, factor_degree, cache=TRUE}
+
+gss_clear<-gss %>% 
+  na_if("NA") %>% #making sure that NA's are treated as missing values
+  mutate(
+        degree=factor(degree, levels=c("Lt high school",
+                                       "High School", "Junior college", 
+                                       "Bachelor", "Graduate"))) %>%
+  #denote degree as a factor variable with levels assigned in accordance to the above order
+  filter(!is.na(degree)) #filtering out those missing values
+class(gss_clear$degree) #checking if it works
+str(gss_clear$degree) #showing the structure of the new variable format
+
+```
+We also create a  new variable, `bachelor_graduate` that takes value *Yes* if the respondent has either a `Bachelor` or `Graduate` degree. But if the recorded value for either was NA, the value of the new variable is NA too.
+
+```{r, bachelor_ggraduate, cache=TRUE}
+gss_bachelor_graduate<-gss_clear %>% 
+  mutate( 
+    bachelor_graduate=ifelse(degree=="", 
+                      #creating new variable which says "NA" if degree is "NA"
+                      "",
+                      ifelse(degree=="Bachelor"|degree=="Graduate",
+                             "Yes", 
+                             "No")))
+#if degree is not "NA" it takes value "Yes" given  that degree is either
+#Bachelor or Graduate. If nothing mentioned before is the case, then the value is "No"
+  
+```
+
+We now calculate the proportion of `bachelor_graduate` who do (Yes) and who don't (No) use twitter. 
+
+```{r, bachelor_ggraduate proportion, cache=TRUE}
+gss_bachelor_graduate %>% 
+  filter(!is.na(twitter)) %>% #filtering out missing values
+  filter(bachelor_graduate=="Yes") %>% #choosing bachlors of graduates only
+  group_by(twitter) %>% #group by twitter use
+  summarise(count=n()) %>% #counting the number of thoes who use and does not
+mutate(prop=count/sum(count))
+  
+```
+
+1. Using the CI formula for proportions, please construct two 95% CIs for `bachelor_graduate` vs whether they use (Yes) and don't (No) use twitter. 
+
+```{r, bachelor_ggraduate interval for twitter, cache=TRUE}
+gss_int<-gss_bachelor_graduate %>% 
+  filter(!is.na(twitter)) %>% #filtering out missing data
+  filter(bachelor_graduate=="Yes") %>% #choosing only bachelors and graduates
+  group_by(twitter) %>% #calculating for who use and do not use twitter
+  summarise(count=n()) %>% #calculating the number of twitter users/not users
+  mutate(total=sum(count)) %>% #finding total bachelors and graduates answered 
+  mutate(prop=count/total) #finding proportion
+
+gss_int %>% 
+  group_by(twitter) %>% #grouping by the interval for twitter users and not twitter users
+  summarise(lower_95=prop-qt(0.975, total-1)*sqrt((prop*(1-prop))/total),
+            upper_95=prop+qt(0.975, total-1)*sqrt((prop*(1-prop))/total))
+#using CI formula for intervals
+
+```
+
+1. Do these two Confidence Intervals overlap?
+
+These intervals do not have overlapping values as there far more "No" values in variable twitter than "Yes", which results in quite distinct sample proportions for "yes" and "no". The t-value by standard error is not enough to guarantee the lower value for "no-interval" to attain the upper value for "yes-interval". Now let's try and bring some intuition. If the intervals do not overlap it means that well-educated people tend to use twitter far less than those with lower levels of education. Before drawing a conclusion it should be mentioned that bachelor or graduate degrees are usually inherent to adults. So there is a chance that current adults (due to less free time or any other reason) do not use twitter as much. Hence it is not an education that is a primary cause for such a discrepancy between intervals but rather an age. 
+
+## Email usage
+
+We next proceed to estimation of the *population* parameter on time spent on email weekly
+
+We created a new variable `email` that combines `emailhr` and `emailmin` to reports the number of minutes the respondents spend on email weekly.
+
+```{r, email, cache=TRUE}
+gss_email<-gss %>%
+  na_if("NA") %>% #making sure R recognises "NA" as missing values
+  mutate(email=as.numeric(emailhr)*60+as.numeric(emailmin)) 
+#creating variable email to report weakly minutes spent on email
+
+gss_email
+```
+
+Visualization of the distribution of this new variable is presented below. We calculate the mean and the median number of minutes respondents spend on email weekly. We next discuss which statistic is better to use in our case.
+
+```{r, email dist, cache=TRUE}
+gss_stat<-gss_email %>%
+  select(email) %>% #choosing email variable 
+  filter(!is.na(email)) %>% #filtering out missing values
+  summarise(mean=mean(email),median=median(email)) #calculating mean and median
+gss_stat
+
+gss_email %>% 
+  filter(!is.na(email)) %>% #filtering out missing values
+ggplot(aes(x=email))+ 
+  #building a plot with number of minutes spent on email weekly on the x-axis
+  geom_density()+ #choosing to build a density plot
+  labs(title="Distribution of time spent on email weekly is right-skewed")+ #title added
+  xlab("Time spent on email weekly (minutes)")+ #x-axis label added
+  theme_stata() #setting a theme
+
+```
+
+Distribution of the variable "email" allows to see that it is heavily right-skewed, which means that average (mean) will also tend to be so, as it is affected by the presence of outliers, which is definitely the case. So to better interpret the 'typical' time for Americans to spend on email, it is better not to rely on such obscure values but rather draw conclusions based on regular users. Hence, median is preferred (it is not affected by outliers).
+
+Calculating a 95% bootstrap confidence interval for the mean amount of time Americans spend on email weekly.
+
+```{r, bootstrap_CI, cache=TRUE}
+
+email_CI <- gss_email %>%
+  filter(!is.na(email)) %>% #filtering out missing values
+  specify(response = email) %>% #doing the necessary steps to build bootstrap interval
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "mean") #choosing the mean as asked
+
+percentile_CI <- email_CI %>%
+  get_ci(level = 0.95, type = "percentile") #getting the interval
+
+percentile_CI
+```
+
+The 95% bootstrap confidence interval produced an output presented above. Interpretation of this interval is as follows: We are 95% confident that population mean of the time Americans spend on email weekly lies in the interval between **6 hours 22 minutes** and **7 hours 30 minutes**. These values, based on common sense, seem an overestimation. Having seen the distribution of the variable "email" and both the mean and the median we can fairly say that mean values are affected by outliers, which shift the mean to the right (toward higher values). For this reason, median was suggested as a more suitable metric. Nevertheless the CI was built to estimate the population mean, so the right-skewness of the data leads to the aforementioned overestimation. 
+
+We have built 95% confidence interval, but let's see what changes when confidence level increases up to 99%.
+All else equal, the higher the confidence level, the wider is the interval. This is very intuitive, as claiming about population parameter with higher certainty would require additional space for possible (but less likely) outcomes, that are not considered when the statement about population is made with lower confidence. Alternatively, this can be derived from the formula of CI for proportions.
+
+Another way to address this question is to use data visualization 
+
+```{r, visual_ci_95, cache=TRUE}
+
+visualize(email_CI) + 
+  shade_ci(endpoints = percentile_CI,fill = "light green")+
+  geom_vline(xintercept = percentile_CI$lower_ci, colour = "red")+
+  geom_vline(xintercept = percentile_CI$upper_ci, colour = "red")+
+  theme_stata()
+
+```
+On this graph we can see the green area highlighting the bounds of 95% confidence interval.
+
+```{r, visual_ci_99, cache=TRUE}
+
+percentile_CI_99 <- email_CI %>%
+  get_ci(level = 0.99, type = "percentile")
+
+percentile_CI_99
+visualize(email_CI) + 
+  shade_ci(endpoints = percentile_CI_99,fill = "light blue")+
+  geom_vline(xintercept = percentile_CI_99$lower_ci, colour = "red")+
+  geom_vline(xintercept = percentile_CI_99$upper_ci, colour = "red")+
+  theme_stata()
+
+```
+Alternatively, this graph shows the bounds of the 99% CI highlighted by the blue area. In comparison to earlier diagram, it definitely is wider, as larger number of possible outcomes need to be considered to state with higher certainty. 
