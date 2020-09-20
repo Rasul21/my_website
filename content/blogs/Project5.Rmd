@@ -3,7 +3,7 @@ categories:
 - ""
 - ""
 date: 2020-09-07
-description: Climate Change and Temperature Anomalies
+description: Global Climate Change and Temperature Anomalies
 draft: false
 image: warming.jpg
 keywords: ""

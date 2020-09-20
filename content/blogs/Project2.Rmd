@@ -3,7 +3,7 @@ categories:
 - ""
 - ""
 date: 2020-09-07
-description: Comparison of two directors
+description: Comparison of directors
 draft: false
 image: hollywood.jpg
 keywords: ""

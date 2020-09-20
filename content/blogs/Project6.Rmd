@@ -3,7 +3,7 @@ categories:
 - ""
 - ""
 date: 2020-09-07
-description: Estimating population proportion of Snapchat and Instagram Users
+description: Estimating population proportion of Snapchat, Instagram, and Twitter Users
 draft: false
 image: social.jpg
 keywords: ""

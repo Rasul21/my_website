@@ -15,7 +15,7 @@ title: "Analysis of AirBnB property prices in Munich"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-1. Executive Summary
+1. Executive Summary:
   A. Background Information
   B. Data Cleaning
   C. Exploratory Data Analysis
