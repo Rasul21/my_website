@@ -94,8 +94,8 @@ disqusShortname = ""
     [[params.tiles.showcase]]
       title = "Analysis of suicide and homicide rates among white males in the US"
       subtitle = "Illustration"
-      image = "pic01.jpg"
-      url = "blogs/aliquam"
+      image = "cowboy_bebop.jpg"
+      #url = "blogs/aliquam"
 
     [[params.tiles.showcase]]
       title = "Tempus"
