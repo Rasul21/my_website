@@ -8,6 +8,36 @@
     <language>en-us</language>
     <lastBuildDate>Tue, 31 Oct 2017 22:27:21 -0500</lastBuildDate><atom:link href="/blogs/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Analysis of Social Networks Use Among Adults in The US</title>
+      <link>/blogs/project6/</link>
+      <pubDate>Mon, 07 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blogs/project6/</guid>
+      <description>General Social Survey (GSS) The General Social Survey (GSS) gathers data on American society in order to monitor and explain trends in attitudes, behaviours, and attributes. Many trends have been tracked for decades, so one can see the evolution of attitudes, etc in American Society.
+Using data from the 2016 GSS sample data we are attempting to estimate the values of population parameters of interest about US adults. The GSS sample data file has 2867 observations of 935 variables, but we are only interested in very few of these variables hence a smaller file is chosen.</description>
+    </item>
+    
+    <item>
+      <title>Climate Change and Temperature Anomalies</title>
+      <link>/blogs/project5/</link>
+      <pubDate>Mon, 07 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blogs/project5/</guid>
+      <description>Climate change and temperature anomalies If we wanted to study climate change, we can find data on the Combined Land-Surface Air and Sea-Surface Water Temperature Anomalies in the Northern Hemisphere at NASA’s Goddard Institute for Space Studies. The tabular data of temperature anomalies can be found here
+To define temperature anomalies you need to have a reference, or base, period which NASA clearly states that it is the period between 1951-1980.</description>
+    </item>
+    
+    <item>
+      <title>Comparing Hollywood Directors: Steven Spielberg and Tim Burton</title>
+      <link>/blogs/project2/</link>
+      <pubDate>Mon, 07 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blogs/project2/</guid>
+      <description>IMDB ratings: Differences between directors Recall the IMBD ratings data. We explore whether the mean IMDB rating for Steven Spielberg and Tim Burton are the same or not. We have already calculated the confidence intervals for the mean ratings of these two directors and as you can see they overlap.
+Before we start on with the analysis, it’s is always a good idea to check with skimr::skim() to get a feel for missing values, summary statistics of numerical variables, and a very rough histogram.</description>
+    </item>
+    
+    <item>
       <title>Suicide and Homicide Rates Among White Males in The US</title>
       <link>/blogs/project1/</link>
       <pubDate>Mon, 07 Sep 2020 00:00:00 +0000</pubDate>

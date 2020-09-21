@@ -101,7 +101,7 @@ disqusShortname = ""
       title = "Comparing Hollywood Directors: Steven Spielberg and Tim Burton"
       #subtitle = "Feugiat Amet Tempus"
       image = "hollywood.jpg"
-      url = "blogs/blog3"
+      url = "blogs/Project2"
 
     #[[params.tiles.showcase]]
       #title = "Gender Inequality"
@@ -113,19 +113,19 @@ disqusShortname = ""
       title = "Climate Change and Temperature Anomalies"
       subtitle = "Earth is Heating"
       image = "warming.jpg"
-      url = "blogs/blog4"
+      url = "blogs/Project5"
 
     [[params.tiles.showcase]]
       title = "Analysis of Social Networks Use Among Adults in The US"
       #subtitle = ""
       image = "social.jpg"
-      url = "blogs/blog5"
+      url = "blogs/Project6"
 
-    [[params.tiles.showcase]]
-      title = "Analysis of AirBnB property prices in Munich"
+    #[[params.tiles.showcase]]
+      #title = "Analysis of AirBnB property prices in Munich"
       #subtitle = "Feugiat Amet Tempus"
-      image = "airbnb.jpg"
-      url = "blogs/blog6"
+      #image = "airbnb.jpg"
+      #url = "blogs/blog6"
     # You can make more showcases by copy and pasting the code above
 
   [params.blog]
